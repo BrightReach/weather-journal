@@ -9,7 +9,6 @@ let newDate = d.getMonth() + '.' + d.getDate() + '.' + d.getFullYear();
 // Event listener to use the callback function whenever the generate button has been clicked on
 document.getElementById('generate').addEventListener('click', getWeather);
 
-// Callback function to retrieve the data based on the zip code's current temperature and the user's response
 function getWeather(e) {
   // Declares the variables from both input values from the user
   const zipCode = document.getElementById('zip').value;
@@ -42,6 +41,7 @@ const retrieveData = async (url, zip, key) => {
   } catch (error) {
     // Error handler
     console.log('error', error);
+    logError(error);
   }
 };
 
@@ -63,6 +63,7 @@ const postData = async (url = '', data = {}) => {
   } catch (error) {
     // Error handler
     console.log('Error: ', error);
+    logError(error);
   }
 };
 
@@ -74,11 +75,18 @@ const getResults = async () => {
      * with their corresponding IDs
      */
     const allData = await request.json();
-    document.getElementById('temp').innerHTML = allData[0].temp;
-    document.getElementById('date').innerHTML = allData[0].date;
-    document.getElementById('content').innerHTML = allData[0].response;
+    document.getElementById('temp').innerHTML =
+      allData[allData.length - 1].temp;
+    document.getElementById('date').innerHTML =
+      allData[allData.length - 1].date;
+    document.getElementById('content').innerHTML =
+      allData[allData.length - 1].response;
   } catch (error) {
     // Error handler
     console.log('Error: ', error);
+    logError(error);
   }
 };
+
+const logError = (e) =>
+  (document.getElementById('content').innerHTML = `Error:${e}`);
